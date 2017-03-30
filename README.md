@@ -355,8 +355,147 @@ func();
 ```
 
 
-
-
-
-
-
+## 数组去重
+#### 方法一
+定义一个数组res保存结果，遍历需要去重的数组，将需要去重的数组和res比较，如果该元素存在res中，不放入，否则放入数组中：
+```apple js
+function unique(a) {
+    var res=[];
+    for(var i=0,len=a.length;i<len;i++){
+        var item=a[i];
+        for(var j=0,resLen=res.length;j<resLen;j++){//①
+            if(res[j]===item){
+                break;//break:结束①的循环;continue:结束当前j的循环，j+1的循环继续执行
+            }
+        }
+        //当①的循环结束，如果还没有break，则表示item不存在res中
+        if(j===resLen){
+            res.push(item)
+        }
+    }
+    return res;
+}
+var x=[1,1,'1','2',2,1]
+var ans=unique(x)
+console.log(ans);//输出 [1, "1", "2", 2]
+```
+优化：可以用ES5的Array.prototype.indexOf()方法来简化代码
+```apple js
+function unique(a) {
+    var res=[];
+    for(var i=0,len=a.length;i<len;i++){
+        var item=a[i];
+        (res.indexOf(item)===-1)&&res.push(item)
+    }
+    return res;
+}
+var x=[1,1,'1','2',2,1]
+var ans=unique(x)
+console.log(ans);//输出 [1, "1", "2", 2]
+```
+用filter(callback,thisArg)，继续优化：
+```apple js
+//filter
+function unique(a) {
+    //filter三个参数
+    //item:元素的值
+    //index:元素的索引
+    //array:被遍历的数组
+    var res=a.filter(function(item,index,array) {
+        return array.indexOf(item)===index;//过滤条件
+    })
+    return res;
+}
+var a=[1,1,2,'1','2',2];
+var ans=unique(a);
+console.log(ans)//输出 [1, 2, "1", "2"]
+```
+#### 方法二
+方法一是把数组中的元素和结果数组元素进行比较。换个思路：把数组中重复元素的最后一个元素放入数组结果
+```apple js
+function unique(a) {
+    var res=[];
+    for(var i=0,len=a.length;i<len;i++){//①
+        for(var j=i+1;j<len;j++){
+            //
+            if(a[i] === a[j]){
+                j=++i;//当i增加时，直接进入①的下一个循环，不执行②处的代码
+            }
+        }
+        res.push(a[i]);//②
+    }
+    return res;
+}
+var a = [1, 1, '1', '2', 1];
+var ans = unique(a);
+console.log(ans); // => ["1", "2", 1]
+```
+#### 方法三
+sort()方法，使用sort()方法排序后，相同元素会被放在相邻的位置，只需比较相邻位置的元素即可
+```apple js
+function unique(a) {
+  return a.concat().sort().filter(function(item,pos,ary) {
+    //!pos表示不为第一个参数
+    //item !=ary[pos-1] 表示当前值和前一个值不相等
+    return (!pos)||(item !==ary[pos-1]);
+  });
+}
+var a = [1, 1, 3, 2, 1, 2, 4];
+var ans = unique(a);
+console.log(ans); // => [1, 2, 3, 4]
+```
+但是存在问题,1 和 "1" 会被排在一起，不区分顺序：
+```apple js
+function unique(a) {
+  return a.concat().sort().filter(function(item,pos,ary) {
+    //!pos表示不为第一个参数
+    //item !=ary[pos-1] 表示当前值和前一个值不相等
+    return (!pos)||(item !==ary[pos-1]);
+  });
+}
+var a = [1,'1', 1, 3, 2, 1, 2, 4,'1'];
+var ans = unique(a);
+console.log(ans); // =>[1, "1", 1, "1", 2, 3, 4]
+```
+#### 方法四
+用javascript中的对象来做哈希表，可以去重完全由Number基本类型组成的数组。
+```apple js
+function unique(a) {
+  var seen={};
+  return a.filter(function(item) {
+    return seen.hasOwnProperty(item)?false:(seen[item]=true)
+  })
+}
+var a=[1,'1',1,2,3,1,2,1,1];
+var ans=unique(a);
+console.log(ans)//输出 [1,2,3]
+```
+但是不能区分1和'1'的问题，改进：
+```apple js
+function unique(a) {
+  var ret=[];
+  var hash={};
+  for (var i=0,len=a.length;i<len;i++){
+      var item  =a[i];
+      var key=typeof(item) + item;
+      if(hash[key]!==1){
+          ret.push(item);
+          hash[key]=1;
+      }
+  }
+  return ret;
+}
+var a=[1,'1',1,'1','1'];
+var ans=unique(a);
+console.log(ans)// 输出 [1, "1"]
+```
+#### 方法五
+ES6 利用Set()方法的一个特性(去重)：
+```apple js
+function unique(a) {
+  return Array.from(new Set(a));
+}
+var a = [{name: "hanzichi"}, {age: 30}, new String(1), new Number(1)];
+var ans = unique(a);
+console.log(ans);
+```
