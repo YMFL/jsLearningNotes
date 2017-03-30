@@ -499,3 +499,6 @@ var a = [{name: "hanzichi"}, {age: 30}, new String(1), new Number(1)];
 var ans = unique(a);
 console.log(ans);
 ```
+## ES6学习
+阅读的文档 http://es6.ruanyifeng.com/#README
+#### let
