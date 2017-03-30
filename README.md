@@ -500,5 +500,21 @@ var ans = unique(a);
 console.log(ans);
 ```
 ## ES6学习
-阅读的文档 http://es6.ruanyifeng.com/#README
+文档地址 [`http://es6.ruanyifeng.com/#README`](http://es6.ruanyifeng.com/#README)
 #### let
+1.不可重复声明；<br />
+2.没有变量提升；<br />
+3.暂时性死区；<br />
+特别之处：for循环语句部分是一个父作用域，循环体内部是一个单独的子作用域：
+```javascript 1.8
+for (let i = 0; i < 3; i++) {
+  let i = 'abc';
+  console.log(i);
+}//输出三个'abc'
+```
+#### 块级作用域与函数声明
+ES6之前，只有全局作用域和函数作用域，ES6引入块级作用域；
+ES6规定，块级作用域中，函数声明语句的行为类似与let，在块级作用域之外不可引用。
+```javascript 1.8
+
+```
