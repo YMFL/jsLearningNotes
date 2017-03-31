@@ -506,7 +506,7 @@ console.log(ans);
 2.没有变量提升；<br />
 3.暂时性死区；<br />
 特别之处：for循环语句部分是一个父作用域，循环体内部是一个单独的子作用域：
-```javascript 1.8
+```jsx harmony
 for (let i = 0; i < 3; i++) {
   let i = 'abc';
   console.log(i);
@@ -517,7 +517,7 @@ ES6之前，只有全局作用域和函数作用域，ES6引入块级作用域�
 ES6规定，块级作用域中，函数声明语句的行为类似与let，在块级作用域之外不可引用。
 #### const
 const 声明一个只读变量，作用域同let.一旦声明，常量就要马上赋值并且不能改变： 
-```javascript 1.8
+```jsx harmony
 const PI = 3.1415;
 PI // 3.1415
 PI = 3;
@@ -525,7 +525,7 @@ PI = 3;
 ```
 const本质：并不是变量的值不得改动，而是变量指向的内存地址不得改动，对于复合类型的数据（对象和数组），
 变量指向的内存地址，保存的是一个指针，const只能保证这个指针是固定的，指针指向的数据结构不可控制。
-```javascript 1.8
+```jsx harmony
 const foo = {};
 
 // 为 foo 添加一个属性，可以成功
@@ -536,7 +536,7 @@ foo.prop // 123
 foo = {}; // TypeError: "foo" is read-only
 ```
 如果想将对象冻结，可以使用Object.freeze({})方法。
-```javascript 1.8
+```jsx harmony
 const foo = Object.freeze({});
 // 常规模式时，下面一行不起作用；
 // 严格模式时，该行会报错
@@ -547,14 +547,14 @@ console.log(foo.prop)//输出 undefined
 var;function;let;const;import;class;
 #### 顶层对象
 浏览器顶层对象为window；  Node的顶层对象为global；  在ES5中，顶层对象的属性和全局变量是等价的。
-```javascript 1.8
+```jsx harmony
 window.a = 1;
 a // 1
 a = 2;
 window.a // 2
 ```
 为了兼容性，ES6规定：var和function命令声明的全局变量，依然是顶层对象的属性；let，const，class命令声明的全局变量，不属于顶层对象的属性。从ES6开始，全局对象与顶层对象的属性脱离。
-```javascript 1.8
+```jsx harmony
 var a = 1;
 // 如果在Node的REPL环境，可以写成global.a
 // 或者采用通用方法，写成this.a
@@ -572,7 +572,7 @@ ES5的顶层对象，非常不统一：
 不管是严格模式，还是普通模式，new Function('return this')()，总是会返回全局对象。但是，如果浏览器用了CSP（Content Security Policy，内容安全政策），那么eval、new Function这些方法都可能无法使用。
 ```
 两种解决上述问题的方法：
-```javascript 1.8
+```jsx harmony
 // 方法一
 (typeof window !== 'undefined'
    ? window
@@ -589,10 +589,71 @@ var getGlobal = function () {
   throw new Error('unable to locate global object');
 };
 ```
+有一个提案，引入global作为顶层对象。在所有环境下，global都是存在的，垫片库system.global模拟了这个提案：
+```jsx harmony
+// CommonJS的写法
+require('system.global/shim')();
+// ES6模块的写法
+import shim from 'system.global/shim'; shim();
+```
+#### 数组的解构赋值与Iterator
+```jsx harmony
+//普通
+let [a, b, c] = [1, 2, 3];
+console.log(a);//1
+console.log(b);//2
+console.log(c);//3
+//如果解构不成功，变量的值为undefined
+let [x, y, ...z] = ['a'];
+x // "a"
+y // undefined
+z // []
+//
+let [head, ...tail] = [1, 2, 3, 4];
+head // 1
+tail // [2, 3, 4]
+//不完全解构：等号左边只匹配一部分等号右边的数组
+let [x, y] = [1, 2, 3];
+x // 1
+y // 2
+let [a, [b], d] = [1, [2, 3], 4];
+a // 1
+b // 2
+d // 4
+```
+如果等号右边不是数组（不是可遍历结构），就会报错：
+```jsx harmony
+//全部报错
+let [foo] = 1;
+let [foo] = false;
+let [foo] = NaN;
+let [foo] = undefined;
+let [foo] = null;
+let [foo] = {};
+```
+上面的语句都会报错，因为等号右边的值，转为对象以后不具备Iterator接口(前五个)，要么本身就不具备Iterator接口（最后一个表达式）。
+对于Set结构，也可以使用数组的解构赋值。
+```jsx harmony
+let [w, x, y, z] = new Set(['a', 'b', 'c', 'c']);
+w;//'a'
+x;//'b'
+y;//'c'
+z;//undefined, 应为Set有去重的功能
+```
+只要有Iterator接口，都可以使用解构赋值。
+```jsx harmony
+function* fibs() {
+  let a = 0;
+  let b = 1;
+  while (true) {
+    yield a;
+    [a, b] = [b, a + b];
+  }
+}
 
-
-
-
+let [first, second, third, fourth, fifth, sixth] = fibs();
+sixth // 5
+```
 
 
 
