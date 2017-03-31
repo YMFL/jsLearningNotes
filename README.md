@@ -515,6 +515,106 @@ for (let i = 0; i < 3; i++) {
 #### 块级作用域与函数声明
 ES6之前，只有全局作用域和函数作用域，ES6引入块级作用域；
 ES6规定，块级作用域中，函数声明语句的行为类似与let，在块级作用域之外不可引用。
+#### const
+const 声明一个只读变量，作用域同let.一旦声明，常量就要马上赋值并且不能改变： 
 ```javascript 1.8
-
+const PI = 3.1415;
+PI // 3.1415
+PI = 3;
+// TypeError: Assignment to constant variable.
 ```
+const本质：并不是变量的值不得改动，而是变量指向的内存地址不得改动，对于复合类型的数据（对象和数组），
+变量指向的内存地址，保存的是一个指针，const只能保证这个指针是固定的，指针指向的数据结构不可控制。
+```javascript 1.8
+const foo = {};
+
+// 为 foo 添加一个属性，可以成功
+foo.prop = 123;
+foo.prop // 123
+
+// 将 foo 指向另一个对象，就会报错
+foo = {}; // TypeError: "foo" is read-only
+```
+如果想将对象冻结，可以使用Object.freeze({})方法。
+```javascript 1.8
+const foo = Object.freeze({});
+// 常规模式时，下面一行不起作用；
+// 严格模式时，该行会报错
+foo.prop = 123;
+console.log(foo.prop)//输出 undefined
+```
+#### ES6的6种声明
+var;function;let;const;import;class;
+#### 顶层对象
+浏览器顶层对象为window；  Node的顶层对象为global；  在ES5中，顶层对象的属性和全局变量是等价的。
+```javascript 1.8
+window.a = 1;
+a // 1
+a = 2;
+window.a // 2
+```
+为了兼容性，ES6规定：var和function命令声明的全局变量，依然是顶层对象的属性；let，const，class命令声明的全局变量，不属于顶层对象的属性。从ES6开始，全局对象与顶层对象的属性脱离。
+```javascript 1.8
+var a = 1;
+// 如果在Node的REPL环境，可以写成global.a
+// 或者采用通用方法，写成this.a
+window.a // 1
+let b = 1;
+window.b // undefined
+```
+#### global对象
+ES5的顶层对象，非常不统一：
+浏览器里是window,但是node和Web worker没有window.浏览器和Web worker里面，self也指向顶层对象，单node没有self。Node里面，顶层对象是global,但其他环境不支持。
+为了都能取到顶层对象，现在一般使用this变量，但是有局限性。
+```text
+全局环境中，this会返回顶层对象。但是，Node模块和ES6模块中，this返回的是当前模块。
+函数里面的this，如果函数不是作为对象的方法运行，而是单纯作为函数运行，this会指向顶层对象。但是，严格模式下，这时this会返回undefined。
+不管是严格模式，还是普通模式，new Function('return this')()，总是会返回全局对象。但是，如果浏览器用了CSP（Content Security Policy，内容安全政策），那么eval、new Function这些方法都可能无法使用。
+```
+两种解决上述问题的方法：
+```javascript 1.8
+// 方法一
+(typeof window !== 'undefined'
+   ? window
+   : (typeof process === 'object' &&
+      typeof require === 'function' &&
+      typeof global === 'object')
+     ? global
+     : this);
+// 方法二
+var getGlobal = function () {
+  if (typeof self !== 'undefined') { return self; }
+  if (typeof window !== 'undefined') { return window; }
+  if (typeof global !== 'undefined') { return global; }
+  throw new Error('unable to locate global object');
+};
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
