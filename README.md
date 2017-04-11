@@ -819,9 +819,40 @@ for (let [,value] of map) {
 ```jsx harmony
 const { SourceMapConsumer, SourceNode } = require("source-map");
 ```
-
-
-
-
-
+#### 数组扩展
+Array.from()作用：将类数组对象和可遍历对象转为真正的数组。
+```jsx harmony
+let arrayLike = {
+    '0': 'a',
+    '1': 'b',
+    '2': 'c',
+    length: 3
+};
+// ES5的写法
+var arr1 = [].slice.call(arrayLike); // ['a', 'b', 'c']
+// ES6的写法
+let arr2 = Array.from(arrayLike); // ['a', 'b', 'c']
+```
+Array.from()接受第二个参数的用法，作用类似数组的map方法，对每个元素进行处理，返回的数组为处理后的值：
+```jsx harmony
+Array.from([1,2,3],x=>x*x);//[1,4,9]
+//等同于
+Array.from([1,2,3]).map(x=> x*x);
+```
+Array.of()方法用于将一组值，转换为数组。
+```jsx harmony
+Array.of(3, 11, 8) // [3,11,8]
+Array.of(3) // [3]
+Array.of(3).length // 1
+```
+为什么会有Array.of()?用来解决由于参数不同导致的重载问题，行为统一
+```jsx harmony
+Array() // []
+Array(3) // [undefined * 3]  当参数为1个时，指定的是数组的长度而不是
+Array(3, 11, 8) // [3, 11, 8]
+// 模拟Array.of();
+function ArrayOf(){
+  return [].slice.call(arguments);
+}
+```
 
