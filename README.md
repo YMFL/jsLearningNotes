@@ -855,4 +855,119 @@ function ArrayOf(){
   return [].slice.call(arguments);
 }
 ```
+#### 函数的扩展
+指定函数默认值
+```jsx harmony
+//es5方法
+function log(x, y) {
+  y = y || 'World';
+  console.log(x, y);
+}
+log('Hello') // Hello World
+//es6方法
+function Point(x = 0, y = 0) {
+  this.x = x;
+  this.y = y;
+}
+var p = new Point();
+p // { x: 0, y: 0 }
+```
+函数有name属性，会返回函数名
+```jsx harmony
+var f = function () {};
+// ES5
+f.name // ""
+// ES6
+f.name // "f"
+```
+箭头函数（=>）,如果箭头函数的代码块部分多于一条语句，就是用大括号将他们括起来，并用return返回
+```jsx harmony
+var sum = (num1, num2) => { return num1 + num2; }
+```
+如果大括号被解释为代码块，那么箭头函数直接返回一个对象，必须在对象上加上括号
+```jsx harmony
+var getTempItem = id => ({ id: id, name: "Temp" });
+```
+#### 对象的扩展
+属性简洁表示：
+```jsx harmony
+var foo = 'bar';
+var baz = {foo};
+baz // {foo: "bar"}
+// 等同于
+var baz = {foo: foo};
+```
+对象方法的name属性：
+```jsx harmony
+const person = {
+  sayName() {
+    console.log('hello!');
+  },
+};
+person.sayName.name   // "sayName"
+```
+比较两个值是否相等：Object.is();
+ES5只有两种方法(==)和(===)。
+```jsx harmony
+Object.is('foo', 'foo')// true
+Object.is({}, {})// false
 
+
++0 === -0 //true
+NaN === NaN // false
+
+Object.is(+0, -0) // false
+Object.is(NaN, NaN) // true
+```
+对象合并：Object.assign（）,将源对象的所有可枚举属性复制到目标对象中
+```jsx harmony
+var target = { a: 1 };
+var source1 = { b: 2 };
+var source2 = { c: 3 };
+var source3 = { a: 3 };
+Object.assign(target, source1, source2,source3);
+target // {a:3, b:2, c:3}
+```
+#### Set和Map数据结构
+类似数组，但是成员唯一，所以可以用来去重
+```jsx harmony
+// Set实例的属性和方法
+// Set.prototype.constructor:构造函数
+// Set.prototype.size：返回Set实例的成员总数。
+// Set实例的方法分为两大类：操作方法（操作数据）和遍历方法（遍历成员）。
+// 操作方法：</hr>
+// add(value):添加某个值，返回Set结构本身。</hr>
+// delete(value):删除某个值，返回一个布尔值，表示删除是否成功。</hr>
+// has(value):返回一个布尔值，表示该值是否为Set的成员。</hr>
+// clear():清除所有成员，无返回值。</hr>
+// 遍历方法：</hr>
+// keys():返回键名的遍历器</hr>
+// values():返回键值的遍历器</hr>
+// entries()：返回键值对的遍历器</hr>
+// forEach()：使用回调函数遍历每个成员</hr>
+```
+Set结构，没有键名只有键值（键名和键值是同一个值），所有遍历的时，keys和values方法行为一致
+```jsx harmony
+let set = new Set(['red', 'green', 'blue']);
+
+for (let item of set.keys()) {
+  console.log(item);
+}
+// red
+// green
+// blue
+for (let item of set.values()) {
+  console.log(item);
+}
+// red
+// green
+// blue
+for (let item of set.entries()) {
+  console.log(item);
+}
+// ["red", "red"]
+// ["green", "green"]
+// ["blue", "blue"]
+```
+Map结构
+类似对象（对象的键只是字符串），但是键
