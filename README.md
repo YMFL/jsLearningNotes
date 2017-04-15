@@ -970,4 +970,4 @@ for (let item of set.entries()) {
 // ["blue", "blue"]
 ```
 Map结构
-类似对象（对象的键只是字符串），但是键
+类似对象（对象的键只是字符串）
