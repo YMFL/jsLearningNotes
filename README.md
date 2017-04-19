@@ -969,5 +969,13 @@ for (let item of set.entries()) {
 // ["green", "green"]
 // ["blue", "blue"]
 ```
-Map结构
-类似对象（对象的键只是字符串）
+Map结构,类似对象（对象的键只能是字符串），可以用各种类型的值（包括对象）来当做键。
+```jsx harmony
+const m = new Map();
+const o = {p: 'Hello World'};
+m.set(o, 'content')
+m.get(o) // "content"
+m.has(o) // true
+m.delete(o) // true
+m.has(o) // false
+```
