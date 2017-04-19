@@ -979,3 +979,87 @@ m.has(o) // true
 m.delete(o) // true
 m.has(o) // false
 ```
+Map属性和操作方法
+```jsx harmony
+// Set实例的属性和方法
+// 属性：size
+// 方法：
+// set(key,val)，会返回Map对象，可以使用链式
+// get(key),找到返回键值，否则返回undefined
+// has(key),返回一个Boolean值
+// delete(key),返回一个Boolean值
+// clear() 清除所有成员，无返回值
+// 遍历方法
+// keys()：返回键名的遍历器。
+// values()：返回键值的遍历器。
+// entries()：返回所有成员的遍历器。
+// forEach()：遍历 Map 的所有成员。
+```
+#### Proxy
+Proxy修改某些操作的默认行为，过滤和改写
+#### Reflect
+反射
+#### Promise对象
+一个对象，可以获取异步操作的消息。两大特点：
+（1）对象状态不受外界影响。Promise有三种状态：Pending，Resolved,Rejected。异步操作结果决定当前为哪一种状态。
+（2）一旦状态改变，就不会再变。状态改变有两种可能：从Pending变为Resolved和从Pending变为Rejected。会一直保存状态，再对
+Promise对象添加回调函数也会立即得到这个结果（和事件完全不同，事件如果错过，再去监听，得不到结果）。<br />
+    Promise对象，可以将异步操作以同步操作的流程表达出来，解决了层层嵌套的回调函数。
+基本用法：Promise对象是一个构造函数，用来生成Promise实例
+```jsx harmony
+var promise = new Promise(function(resolve, reject) {
+  // ... some code
+  if (/* 异步操作成功 */){
+    resolve(value);
+  } else {
+    reject(error);
+  }
+});
+```
+Promise方法：
+```jsx harmony
+// Promise.prototype.then(resolved,rejected)
+// 返回一个Promise对象
+// resolved表示Resolved状态的回调函数
+// rejected表示Rejected状态的回调函数
+// ===================================
+// Promise.prototype.catch()
+// .then(null, rejection)的别名
+// 错误的回调函数
+// ===================================
+// Promise.all()
+// 将多个Promise合并为一个新的Peomise实例
+// 当p1,p2,p3状态都为Resolved p的状态才为Resolved，否则为Rejected
+var p =Promise.all([p1, p2, p3]);
+// ===================================
+// Promise.race();
+// 将多个Promise合并为一个新的Peomise实例
+// p的状态由p1,p2,p3实例中率先改变的状态决定
+var p = Promise.race([p1, p2, p3]);
+// ===================================
+// Promise.resolve(arg)
+// 将现有对象转为Promise对象，状态为Resolved
+// 如果arg为Promise对象，则不做修改返返回；如果是有then方法的对象，则转为Promise并立即执行then方法。
+// ===================================
+// Promise.reject()；
+// 返回一个新的Promise对象实例，状态为Rejected
+// ===================================
+// Promise.done();
+// 回调链，最后一个放置done方法，用以抛出错误。
+asyncFunc().then(f1).catch(r1).then(f2).done();
+// ===================================
+// Promise.finally()
+// finally方法，不管Promise最终对象如何，都会执行。
+```
+Promise应用
+```jsx harmony
+const preloadImage = function (path) {
+  return new Promise(function (resolve, reject) {
+    var image = new Image();
+    image.onload  = resolve;
+    image.onerror = reject;
+    image.src = path;
+  });
+};
+```
+
