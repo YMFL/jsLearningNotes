@@ -1062,4 +1062,32 @@ const preloadImage = function (path) {
   });
 };
 ```
-
+#### Iterator（遍历器）和for...of
+ES6有4种数据结构，Object,Array,Map,Set。需要一种统一的接口机制，来处理所有不同的数据结构。主要遍历函数为for...of;
+Iterator遍历过程：
+（1）创建一个指针对象，指向当前数据结构的起始位置。也就是说，遍历器对象本质上，就是一个指针对象。
+（2）第一次调用指针对象的next方法，可以将指针指向数据结构的第一个成员。
+（3）第二次调用指针对象的next方法，指针就指向数据结构的第二个成员。
+（4）不断调用指针对象的next方法，直到它指向数据结构的结束位置。
+next每次返回value和done，value为值，done为一个boolean表示是否结束。
+```jsx harmony
+// 数组
+const arr = ['red', 'green', 'blue'];
+for(let v of arr) {
+  console.log(v); // red green blue
+}
+// Map
+var es6 = new Map();
+es6.set("edition", 6);
+es6.set("committee", "TC39");
+es6.set("standard", "ECMA-262");
+for (var [name, value] of es6) {
+  console.log(name + ": " + value);
+}
+// 字符串
+let str = "hello";
+for (let s of str) {
+  console.log(s); // h e l l o
+}
+```
+对象不能直接使用for...of结构
