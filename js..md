@@ -12,3 +12,12 @@ ele.innerHTML = responseHtml;
 document.body.appendChild(ele);
 
 ```
+
+## 懒加载
+#### 懒加载图片
+原理：定时器（或其他方式，如滚动到一定位置），再给img的src属性指定图片路径；
+```jsx harmony
+setTimeout(function(){
+    document.querySelectorAll('img')[0].src='https://avatars1.githubusercontent.com/u/18079377?v=3&s=460'
+},2000)
+```
