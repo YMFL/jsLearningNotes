@@ -1091,3 +1091,26 @@ for (let s of str) {
 }
 ```
 对象不能直接使用for...of结构
+#### class
+```jsx harmony
+//定义类
+class Point {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+  toString() {
+    return '(' + this.x + ', ' + this.y + ')';
+  }
+}
+var point = new Point(2, 3);
+```
+constructor()
+constructor方法是类的默认方法，通过new命令生成对象实例时，自动调用该方法。必须有这个方法，如果没有，会默认加上
+constructor方法
+```jsx harmony
+
+```
+
+
+
