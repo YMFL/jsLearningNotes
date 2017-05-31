@@ -139,3 +139,60 @@ document.getElementById( 'loginBtn' ).onclick = function(){
 ```
 通用的惰性单例：将创建对象和管理单例逻辑隔离出来。
 ## 策略模式
+策略模式指的是定义一系列的算法，把它们一个个封装起来。将不变的部分和变化的部分隔开是每个设计模式的主题，策略模式也不例外，
+策略模式的目的就是将算法的使用与算法的实现分离开来。
+```ecmascript 6
+var performanceS = function(){}; 
+performanceS.prototype.calculate = function( salary ){ 
+ return salary * 4; 
+}; 
+var performanceA = function(){}; 
+performanceA.prototype.calculate = function( salary ){ 
+ return salary * 3; 
+}; 
+var performanceB = function(){}; 
+performanceB.prototype.calculate = function( salary ){ 
+ return salary * 2; 
+}; 
+var Bonus = function(){
+ this.salary = null; // 原始工资
+ this.strategy = null; // 绩效等级对应的策略对象
+}; 
+Bonus.prototype.setSalary = function( salary ){ 
+ this.salary = salary; // 设置员工的原始工资
+}; 
+Bonus.prototype.setStrategy = function( strategy ){ 
+ this.strategy = strategy; // 设置员工绩效等级对应的策略对象
+}; 
+Bonus.prototype.getBonus = function(){ // 取得奖金数额
+ return this.strategy.calculate( this.salary ); // 把计算奖金的操作委托给对应的策略对象
+}; 
+var bonus = new Bonus(); 
+bonus.setSalary( 10000 ); 
+bonus.setStrategy( new performanceS() ); // 设置策略对象
+console.log( bonus.getBonus() ); // 输出：40000 
+bonus.setStrategy( new performanceA() ); // 设置策略对象
+console.log( bonus.getBonus() ); // 输出：30000 
+
+```
+#### javascript版本的策略模式
+```ecmascript 6
+var strategies = { 
+ "S": function( salary ){ 
+ return salary * 4; 
+ }, 
+ "A": function( salary ){ 
+ return salary * 3; 
+ }, 
+ "B": function( salary ){ 
+ return salary * 2; 
+ } 
+}; 
+var calculateBonus = function( level, salary ){ 
+ return strategies[ level ]( salary ); 
+}; 
+console.log( calculateBonus( 'S', 20000 ) ); // 输出：80000 
+console.log( calculateBonus( 'A', 10000 ) ); // 输出：30000
+
+
+```
