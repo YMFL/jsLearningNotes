@@ -21,3 +21,17 @@ setTimeout(function(){
     document.querySelectorAll('img')[0].src='https://avatars1.githubusercontent.com/u/18079377?v=3&s=460'
 },2000)
 ```
+## 字符串过滤
+#### 数字字符分离
+```ecmascript 6
+
+'abc123def456'.split('').filter(function (item) {
+    return isNaN(item)
+}).join('') //abcdef
+
+'abc123def456'.split('').filter(function (item) {
+    return !isNaN(item)
+}).join('') //123456
+
+```
+
